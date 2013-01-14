@@ -1,1 +1,1 @@
-New Class
+no New Class
