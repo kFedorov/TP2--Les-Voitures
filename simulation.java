@@ -7,10 +7,10 @@ import javax.swing.JPanel;
 
 
 public class Simulation extends JPanel {
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	private int m1,m2,v1;
-	private double frottement,angle;
-	private Color cFond=Color.WHITE;
+	private double frottement,angle=10;
+	private Color cFond=Color.WHITE, cRoute=Color.BLACK;
 	
 	public Simulation() {
 		setPreferredSize(new Dimension(1000,500));
@@ -22,6 +22,16 @@ public class Simulation extends JPanel {
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		Graphics2D g2d=(Graphics2D)g;
+		g2d.setColor(cRoute);
+		g2d.drawLine(0, getHeight()*9/10, getWidth()/2, getHeight()*9/10);
+		g2d.setColor(Color.RED);
+		g2d.rotate(-angle*Math.PI/180,getWidth()/2, getHeight()*9/10);
+		g2d.drawLine(getWidth()/2, getHeight()*9/10, getWidth()+100,getHeight()*9/10);
+	
+	}
+	@Override
+	public void setBounds(int x, int y, int width, int height){
+		super.setBounds(x,y,width,(int)(Math.tan((double)(30)/180*Math.PI)*width/2*10/9));
 	}
 	
 
@@ -65,7 +75,15 @@ public class Simulation extends JPanel {
 	}
 
 	public void setAngle(double angle) {
-		this.angle = angle;
+		if(angle>30){
+			this.angle=30;
+		}else{
+			if(angle<0){
+				this.angle=0;
+			}else{
+				this.angle = angle;
+			}
+		}
 		repaint();
 	}
 
