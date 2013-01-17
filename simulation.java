@@ -20,11 +20,11 @@ public class Simulation extends JPanel implements Runnable {
 	private double frottement=0.8,angle=0;
 	private Color cFond=Color.WHITE, cRoute=Color.BLACK, cCarre=Color.GREEN;
 	private Rectangle2D.Double carreAngle;
-	private boolean carreDeplace=false;
+	private boolean carreDeplace=false, carreFonctionnel=true;
 	private Image auto1,auto2;
 	private int posAuto1=0,posAuto2=0;
 	private boolean estAnimee=false;
-	private int v1=35,v2;
+	private double v1=35,v2=25;
 	private double dt=0.03;
 	private double pixelParM;
 	private Thread proc;
@@ -57,7 +57,7 @@ public class Simulation extends JPanel implements Runnable {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				if(carreAngle.contains(getMousePosition())){
+				if(carreAngle.contains(getMousePosition())&&carreFonctionnel){
 					carreDeplace=true;
 					cCarre=Color.RED;
 					repaint();
@@ -67,7 +67,9 @@ public class Simulation extends JPanel implements Runnable {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				carreDeplace=false;
-				cCarre=Color.GREEN;
+				if(carreFonctionnel){
+					cCarre=Color.GREEN;
+				}
 				repaint();
 			}
 		});
@@ -103,15 +105,16 @@ public class Simulation extends JPanel implements Runnable {
 		while (estAnimee){
 			if(posAuto1+v1*dt*pixelParM<getWidth()/2-getWidth()*tailleAuto){
 				posAuto1=(int) (posAuto1+v1*dt*pixelParM);
-			//	System.out.println(posAuto1);
 				
 			}else{
 				posAuto1=(int) (getWidth()/2-getWidth()*tailleAuto);
 				v2Carre=(m1*v1*v1*0.5-frottement*m2*9.8*Math.cos(Math.toRadians(angle))*posAuto2-m2*9.8*posAuto2*Math.sin(Math.toRadians(angle)))*2/m2;
-				if(v2Carre>0){
-					v2=(int) Math.sqrt(v2Carre);
+				if(v2Carre>0&&Math.sqrt(v2Carre)*dt*pixelParM>=1){
+					v2= Math.sqrt(v2Carre);
 					posAuto2=(int) (posAuto2+v2*dt*pixelParM);
 				}else{
+					System.out.println((int)((0.5*m1*v1*v1)/(m2*9.8*(frottement*Math.cos(Math.toRadians(angle))+Math.sin(Math.toRadians(angle))))*pixelParM));
+					posAuto2=(int)((0.5*m1*v1*v1)/(m2*9.8*(frottement*Math.cos(Math.toRadians(angle))+Math.sin(Math.toRadians(angle)))));
 					estAnimee=false;
 				}
 				
@@ -181,11 +184,11 @@ public class Simulation extends JPanel implements Runnable {
 		repaint();
 	}
 
-	public int getV1() {
+	public double getV1() {
 		return v1;
 	}
 
-	public void setV1(int v1) {
+	public void setV1(double v1) {
 		this.v1 = v1;
 		repaint();
 	}
@@ -218,6 +221,8 @@ public class Simulation extends JPanel implements Runnable {
 	}
 	
 	public void animer(){
+		carreFonctionnel=false;
+		cCarre=Color.BLACK;
 		pixelParM=getWidth()/200;
 		estAnimee=true;
 		proc=new Thread(this);
@@ -230,6 +235,8 @@ public class Simulation extends JPanel implements Runnable {
 	}
 	
 	public void arreter(){
+		cCarre=Color.GREEN;
+		carreFonctionnel=true;
 		estAnimee=false;
 		posAuto1=0;
 		posAuto2=0;
