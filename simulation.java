@@ -30,6 +30,7 @@ public class Simulation extends JPanel implements Runnable {
 	private Thread proc;
 	private double tailleAuto=0.04;
 	private double v2Carre;
+	private double vraiePosAuto2;
 	
 	public Simulation() {
 		addMouseMotionListener(new MouseMotionAdapter() {
@@ -108,15 +109,16 @@ public class Simulation extends JPanel implements Runnable {
 				
 			}else{
 				posAuto1=(int) (getWidth()/2-getWidth()*tailleAuto);
-				v2Carre=(m1*v1*v1*0.5-frottement*m2*9.8*Math.cos(Math.toRadians(angle))*posAuto2-m2*9.8*posAuto2*Math.sin(Math.toRadians(angle)))*2/m2;
+				v2Carre=(m1*v1*v1*0.5-frottement*m2*9.8*Math.cos(Math.toRadians(angle))*vraiePosAuto2/pixelParM-m2*9.8*vraiePosAuto2/pixelParM*Math.sin(Math.toRadians(angle)))*2/m2;
 				if(v2Carre>0&&Math.sqrt(v2Carre)*dt*pixelParM>=1){
 					v2= Math.sqrt(v2Carre);
-					posAuto2=(int) (posAuto2+v2*dt*pixelParM);
+					vraiePosAuto2= (vraiePosAuto2+v2*dt*pixelParM);
+					posAuto2=(int)(vraiePosAuto2);
 				}else{
-					System.out.println((int)((0.5*m1*v1*v1)/(m2*9.8*(frottement*Math.cos(Math.toRadians(angle))+Math.sin(Math.toRadians(angle))))*pixelParM));
-					posAuto2=(int)((0.5*m1*v1*v1)/(m2*9.8*(frottement*Math.cos(Math.toRadians(angle))+Math.sin(Math.toRadians(angle)))));
+					//posAuto2=(int)((0.5*m1*v1*v1)/(m2*9.8*(frottement*Math.cos(Math.toRadians(angle))+Math.sin(Math.toRadians(angle))))*pixelParM);
 					estAnimee=false;
 				}
+				//System.out.println(vraiePosAuto2+","+posAuto2+", "+pixelParM);
 				
 				
 			}
@@ -163,6 +165,7 @@ public class Simulation extends JPanel implements Runnable {
 	@Override
 	public void setBounds(int x, int y, int width, int height){
 		super.setBounds(x,y,width,(int)(Math.tan((double)(30)/180*Math.PI)*width/2*10/9));
+		pixelParM=(double)(width)/200;
 	}
 	
 
@@ -221,12 +224,13 @@ public class Simulation extends JPanel implements Runnable {
 	}
 	
 	public void animer(){
-		carreFonctionnel=false;
-		cCarre=Color.BLACK;
-		pixelParM=getWidth()/200;
-		estAnimee=true;
-		proc=new Thread(this);
-		proc.start();
+		if(carreFonctionnel){
+			carreFonctionnel=false;
+			cCarre=Color.BLACK;
+			estAnimee=true;
+			proc=new Thread(this);
+			proc.start();
+		}
 		
 	}
 	
@@ -239,6 +243,7 @@ public class Simulation extends JPanel implements Runnable {
 		carreFonctionnel=true;
 		estAnimee=false;
 		posAuto1=0;
+		vraiePosAuto2=0;
 		posAuto2=0;
 		repaint();
 	}
