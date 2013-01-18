@@ -236,6 +236,7 @@ public class Application extends JFrame {
 		simulation = new Simulation();
 		simulation.setBorder(null);
 		simulation.setBounds(11, 11, 1000, 350);
+		simulation.setAngle(20);
 		contentPane.add(simulation);
 	}
 }
