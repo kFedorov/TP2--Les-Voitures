@@ -12,6 +12,7 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.event.EventListenerList;
 
 
 public class Simulation extends JPanel implements Runnable {
@@ -30,7 +31,8 @@ public class Simulation extends JPanel implements Runnable {
 	private Thread proc;
 	private double tailleAuto=0.04;
 	private double v2Carre;
-	private double vraiePosAuto2;
+	private double vraiePosAuto2=0;
+	private final EventListenerList ecouteurs=new EventListenerList();
 	
 	public Simulation() {
 		addMouseMotionListener(new MouseMotionAdapter() {
@@ -50,7 +52,7 @@ public class Simulation extends JPanel implements Runnable {
 						}
 					}
 					
-					
+					fireAngleChange();
 					repaint();
 				}
 			}
@@ -116,12 +118,14 @@ public class Simulation extends JPanel implements Runnable {
 					posAuto2=(int)(vraiePosAuto2);
 				}else{
 					//posAuto2=(int)((0.5*m1*v1*v1)/(m2*9.8*(frottement*Math.cos(Math.toRadians(angle))+Math.sin(Math.toRadians(angle))))*pixelParM);
+					fireAnimationTermine();
 					estAnimee=false;
 				}
 				//System.out.println(vraiePosAuto2+","+posAuto2+", "+pixelParM);
 				
 				
 			}
+			fireEstAnime();
 			repaint();
 			try {
 				Thread.sleep((long)(dt*1000));
@@ -218,19 +222,18 @@ public class Simulation extends JPanel implements Runnable {
 				this.angle = angle;
 			}
 		}
-		carreHeight=(int)(getHeight()*9/10-Math.tan((double)(angle)/180*Math.PI)*getWidth()/2);
+		carreHeight=(int)(getHeight()*9/10-Math.tan(Math.toRadians(angle))*getWidth()/2);
 		repaint();
 		
 	}
 	
 	public void animer(){
-		if(carreFonctionnel){
-			carreFonctionnel=false;
-			cCarre=Color.BLACK;
-			estAnimee=true;
-			proc=new Thread(this);
-			proc.start();
-		}
+		carreFonctionnel=false;
+		cCarre=Color.BLACK;
+		estAnimee=true;
+		proc=new Thread(this);
+		proc.start();
+		
 		
 	}
 	
@@ -246,6 +249,25 @@ public class Simulation extends JPanel implements Runnable {
 		vraiePosAuto2=0;
 		posAuto2=0;
 		repaint();
+	}
+	
+	public void addSimListener(SimListener ecout){
+		ecouteurs.add(SimListener.class, ecout);
+	}
+	private void fireAnimationTermine(){
+		for (SimListener ecout:ecouteurs.getListeners(SimListener.class)){
+			ecout.animationTermine();
+		}
+	}
+	private void fireAngleChange(){
+		for(SimListener ecout:ecouteurs.getListeners(SimListener.class)){
+			ecout.angleChange();
+		}
+	}
+	private void fireEstAnime(){
+		for (SimListener ecout:ecouteurs.getListeners(SimListener.class)){
+			ecout.estAnime();
+		}
 	}
 
 	
