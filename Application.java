@@ -67,6 +67,7 @@ public class Application extends JFrame {
 	 * Create the frame.
 	 */
 	public Application() {
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1040, 520);
 		contentPane = new JPanel();
@@ -85,13 +86,13 @@ public class Application extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				simulation.setM1(3200);
 				simulation.setM2(2000);
-				simulation.setV1(35);
+				simulation.setV1((double)35);
 				simulation.setAngle(20.00);
 				simulation.setFrottement(0.8);
 				//DELTA T?
 				spnMasse1.setValue(3200);
 				spnMasse2.setValue(2000);
-				spnVitesse.setValue(35);
+				spnVitesse.setValue((double)35);
 				spnAngle.setValue(20.00);
 				spnCoeff.setValue(0.8);
 			}
@@ -155,7 +156,7 @@ public class Application extends JFrame {
 				simulation.setV1((double) spnVitesse.getValue());
 			}
 		});
-		spnVitesse.setModel(new SpinnerNumberModel(new Double(1), new Double(1), null, new Double(1)));
+		spnVitesse.setModel(new SpinnerNumberModel(new Double(1.0), new Double(1.0), null, new Double(1.0)));
 		spnVitesse.setBounds(66, 85, 87, 20);
 		panel.add(spnVitesse);
 		
