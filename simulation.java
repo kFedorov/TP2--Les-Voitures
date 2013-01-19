@@ -112,11 +112,11 @@ public class Simulation extends JPanel implements Runnable {
 			}else{
 				posAuto1=(int) (getWidth()/2-getWidth()*tailleAuto);
 				v2Carre=(m1*v1*v1*0.5-frottement*m2*9.8*Math.cos(Math.toRadians(angle))*vraiePosAuto2/pixelParM-m2*9.8*vraiePosAuto2/pixelParM*Math.sin(Math.toRadians(angle)))*2/m2;
-				if(v2Carre>0&&Math.sqrt(v2Carre)*dt*pixelParM>=1){
+				if(v2Carre>0){
 					v2= Math.sqrt(v2Carre);
 					vraiePosAuto2= (vraiePosAuto2+v2*dt*pixelParM);
 					posAuto2=(int)(vraiePosAuto2);
-					System.out.println(posAuto2+","+vraiePosAuto2);
+					System.out.println(v2);
 				}else{
 					//posAuto2=(int)((0.5*m1*v1*v1-0.5*m2*v2*v2)/(m2*9.8*(frottement*Math.cos(Math.toRadians(angle))+Math.sin(Math.toRadians(angle))))*pixelParM);
 					v2=0;
