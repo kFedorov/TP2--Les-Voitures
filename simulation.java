@@ -25,7 +25,7 @@ public class Simulation extends JPanel implements Runnable {
 	private Image auto1,auto2;
 	private int posAuto1=0,posAuto2=0;
 	private boolean estAnimee=false;
-	private double v1=35,v2=25;
+	private double v1=35,v2=0;
 	private double dt=0.03;
 	private double pixelParM;
 	private Thread proc;
@@ -198,6 +198,14 @@ public class Simulation extends JPanel implements Runnable {
 	public void setV1(double v1) {
 		this.v1 = v1;
 		repaint();
+	}
+	
+	public double getV2(){
+		return v2;
+	}
+	
+	public double getDeplace(){
+		return vraiePosAuto2;
 	}
 
 	public double getFrottement() {
