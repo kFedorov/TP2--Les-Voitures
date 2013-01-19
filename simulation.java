@@ -116,8 +116,10 @@ public class Simulation extends JPanel implements Runnable {
 					v2= Math.sqrt(v2Carre);
 					vraiePosAuto2= (vraiePosAuto2+v2*dt*pixelParM);
 					posAuto2=(int)(vraiePosAuto2);
+					System.out.println(posAuto2+","+vraiePosAuto2);
 				}else{
-					//posAuto2=(int)((0.5*m1*v1*v1)/(m2*9.8*(frottement*Math.cos(Math.toRadians(angle))+Math.sin(Math.toRadians(angle))))*pixelParM);
+					//posAuto2=(int)((0.5*m1*v1*v1-0.5*m2*v2*v2)/(m2*9.8*(frottement*Math.cos(Math.toRadians(angle))+Math.sin(Math.toRadians(angle))))*pixelParM);
+					v2=0;
 					fireAnimationTermine();
 					estAnimee=false;
 				}
@@ -199,14 +201,6 @@ public class Simulation extends JPanel implements Runnable {
 		this.v1 = v1;
 		repaint();
 	}
-	
-	public double getV2(){
-		return v2;
-	}
-	
-	public double getDeplace(){
-		return vraiePosAuto2;
-	}
 
 	public double getFrottement() {
 		return frottement;
@@ -257,6 +251,14 @@ public class Simulation extends JPanel implements Runnable {
 		vraiePosAuto2=0;
 		posAuto2=0;
 		repaint();
+	}
+	
+	public double getV2(){
+		return v2;
+	}
+
+	public double getDeplace(){
+		return vraiePosAuto2/pixelParM;
 	}
 	
 	public void addSimListener(SimListener ecout){
