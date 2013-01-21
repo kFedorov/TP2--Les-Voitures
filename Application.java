@@ -20,6 +20,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.JTextField;
+import javax.swing.JLayeredPane;
 
 
 public class Application extends JFrame {
@@ -129,7 +130,7 @@ public class Application extends JFrame {
 				simulation.setM1((int) spnMasse1.getValue());
 			}
 		});
-		spnMasse1.setModel(new SpinnerNumberModel(new Integer(100), new Integer(100), null, new Integer(10)));
+		spnMasse1.setModel(new SpinnerNumberModel(new Integer(3200), new Integer(100), null, new Integer(10)));
 		spnMasse1.setBounds(66, 8, 87, 20);
 		panel.add(spnMasse1);
 
@@ -139,7 +140,7 @@ public class Application extends JFrame {
 				simulation.setM2((int)(spnMasse2.getValue()));
 			}
 		});
-		spnMasse2.setModel(new SpinnerNumberModel(new Integer(100), new Integer(100), null, new Integer(10)));
+		spnMasse2.setModel(new SpinnerNumberModel(new Integer(2000), new Integer(100), null, new Integer(10)));
 		spnMasse2.setBounds(253, 8, 113, 20);
 		panel.add(spnMasse2);
 
@@ -149,7 +150,7 @@ public class Application extends JFrame {
 				simulation.setFrottement((double)(spnCoeff.getValue()));
 			}
 		});
-		spnCoeff.setModel(new SpinnerNumberModel(new Double(1), new Double(0), null, new Double(0.2)));
+		spnCoeff.setModel(new SpinnerNumberModel(new Double(0.8), new Double(0.1), null, new Double(0.1)));
 		spnCoeff.setBounds(66, 47, 87, 20);
 		panel.add(spnCoeff);
 
@@ -169,7 +170,7 @@ public class Application extends JFrame {
 				simulation.setAngle((double) (spnAngle.getValue()));
 			}
 		});
-		spnAngle.setModel(new SpinnerNumberModel(10.0, 0.0, 30.0, 1.0));
+		spnAngle.setModel(new SpinnerNumberModel(20.0, 0.0, 30.0, 0.1));
 		spnAngle.setBounds(327, 47, 39, 20);
 		panel.add(spnAngle);
 
