@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -18,7 +19,7 @@ import javax.swing.event.EventListenerList;
 public class Simulation extends JPanel implements Runnable {
 	private static final long serialVersionUID = 1L;
 	private int m1=3200,m2=2000, carreHeight;
-	private double frottement=0.8,angle=0;
+	private double frottement=0.8,angle=45;
 	private Color cFond=Color.WHITE, cRoute=Color.BLACK, cCarre=Color.GREEN;
 	private Rectangle2D.Double carreAngle;
 	private boolean carreDeplace=false, carreFonctionnel=true;
@@ -33,6 +34,7 @@ public class Simulation extends JPanel implements Runnable {
 	private double v2Carre;
 	private double vraiePosAuto2=0;
 	private final EventListenerList ecouteurs=new EventListenerList();
+	private int tailleCarre=10;
 	
 	public Simulation() {
 		addMouseMotionListener(new MouseMotionAdapter() {
@@ -41,7 +43,7 @@ public class Simulation extends JPanel implements Runnable {
 				if(carreDeplace){
 					if(e.getY()<=0){
 						carreHeight=0;
-						angle=30;
+						angle=45;
 					}else{
 						if(e.getY()>=getHeight()*9/10){
 							carreHeight=getHeight()*9/10;
@@ -116,14 +118,12 @@ public class Simulation extends JPanel implements Runnable {
 					v2= Math.sqrt(v2Carre);
 					vraiePosAuto2= (vraiePosAuto2+v2*dt*pixelParM);
 					posAuto2=(int)(vraiePosAuto2);
-					System.out.println(v2);
 				}else{
-					//posAuto2=(int)((0.5*m1*v1*v1-0.5*m2*v2*v2)/(m2*9.8*(frottement*Math.cos(Math.toRadians(angle))+Math.sin(Math.toRadians(angle))))*pixelParM);
 					v2=0;
 					fireAnimationTermine();
+					
 					estAnimee=false;
 				}
-				//System.out.println(vraiePosAuto2+","+posAuto2+", "+pixelParM);
 				
 				
 			}
@@ -143,34 +143,61 @@ public class Simulation extends JPanel implements Runnable {
 		
 		super.paintComponent(g);
 		Graphics2D g2d=(Graphics2D)g;
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.translate(0, getHeight()*9/10);
-		g2d.scale(1, 1);
+		
 		g2d.drawImage(auto1, posAuto1, (int)(-getWidth()/2*tailleAuto), (int)(getWidth()*tailleAuto), (int)(getWidth()/2*tailleAuto), null);
 		g2d.scale(1, -1);
 				
 		g2d.setColor(cRoute);
 		g2d.drawLine(0, 0, getWidth()/2, 0);
+		for(int i=getWidth()/2;i<=getWidth();i=i+10){
+			g2d.drawLine(i, 0, i+5, 0);
+		}
+		
+		
+
+		g2d.drawArc(getWidth()/3, -getWidth()/6, getWidth()/3, getWidth()/3, 0, -(int) angle);
+		g2d.scale(1, -1);
+		if(angle>=5){
+			g2d.drawString("Angle : "+Math.floor(angle*100)/100+"°", (int) (getWidth()/6*Math.cos(Math.toRadians(angle/2)))+getWidth()/2+4, -(int) (getWidth()/6*Math.sin(Math.toRadians(angle/2))));
+		}
+		g2d.scale(1, -1);
+
 		
 		g2d.rotate(angle*Math.PI/180,getWidth()/2,0);
-		g2d.drawLine(getWidth()/2, 0, getWidth()+100,0);
+		g2d.drawLine(getWidth()/2, 0, (int) (getWidth()+getHeight()*Math.sin(Math.toRadians(angle))),0);
 		
 		g2d.translate(getWidth()/2, 0);
 		g2d.scale(1, -1);
 				
-		g2d.drawImage(auto2, posAuto2, (int)(-getWidth()/2*tailleAuto), (int)(getWidth()*tailleAuto), (int)(getWidth()/2*tailleAuto), null);
+		g2d.drawImage(auto2, posAuto2, (int)(-getWidth()/2*tailleAuto+2), (int)(getWidth()*tailleAuto), (int)(getWidth()/2*tailleAuto-2), null);
+		if(posAuto2>getWidth()/2/Math.cos(Math.toRadians(angle))-100){
+			g2d.drawString("Vitesse: "+Math.floor(v2*100)/100+" m/s", (int) (getWidth()/2/Math.cos(Math.toRadians(angle))-100), (int) (-tailleAuto*getWidth()/2-2));
+		}else{
+			g2d.drawString("Vitesse: "+Math.floor(v2*100)/100+" m/s", posAuto2-5, (int) (-tailleAuto*getWidth()/2-2));
+		}
+		
+		g2d.drawLine(0, 5, posAuto2, 5);
+		if (angle>5){
+			g2d.setColor(Color.white);
+			g2d.fillRect(0,6,140,20);
+			g2d.setColor(Color.black);
+		}
+		g2d.drawString("Déplacement: "+Math.floor(vraiePosAuto2/pixelParM*100)/100+" m.", 0, 20);
 		g2d.translate(-getWidth()/2, 0);
 		g2d.rotate(angle*Math.PI/180,getWidth()/2,0);
 		
 		g2d.translate(0, -getHeight()*9/10);
 		g2d.setColor(cCarre);
-		carreAngle=new Rectangle2D.Double(getWidth()-getHeight()/30, carreHeight-getHeight()/60, getHeight()/30, getHeight()/30);
+		carreAngle=new Rectangle2D.Double(getWidth()-tailleCarre, carreHeight-tailleCarre/2, tailleCarre, tailleCarre);
 		g2d.fill(carreAngle);
 		
 	
 	}
 	@Override
 	public void setBounds(int x, int y, int width, int height){
-		super.setBounds(x,y,width,(int)(Math.tan((double)(30)/180*Math.PI)*width/2*10/9));
+		super.setBounds(x,y,width,(int)(Math.tan((double)(45)/180*Math.PI)*width/2*10/9));
 		pixelParM=(double)(width)/200;
 	}
 	
@@ -215,8 +242,8 @@ public class Simulation extends JPanel implements Runnable {
 	}
 
 	public void setAngle(double angle) {
-		if(angle>30){
-			this.angle=30;
+		if(angle>90){
+			this.angle=90;
 		}else{
 			if(angle<0){
 				this.angle=0;
@@ -250,6 +277,7 @@ public class Simulation extends JPanel implements Runnable {
 		posAuto1=0;
 		vraiePosAuto2=0;
 		posAuto2=0;
+		v2=0;
 		repaint();
 	}
 	
@@ -261,6 +289,14 @@ public class Simulation extends JPanel implements Runnable {
 		return vraiePosAuto2/pixelParM;
 	}
 	
+	public double getDt() {
+		return dt;
+	}
+
+	public void setDt(double dt) {
+		this.dt = dt;
+	}
+
 	public void addSimListener(SimListener ecout){
 		ecouteurs.add(SimListener.class, ecout);
 	}
