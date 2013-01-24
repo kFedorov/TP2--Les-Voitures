@@ -1,387 +1,105 @@
-/**
- * 
- * Classe graphique qui représente le déplacement d'une voiture suite à une collision
- * @author Konstantin Fedorov, Philippe Miriello
- *  
- */
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import javax.swing.event.EventListenerList;
 
 
-public class Simulation extends JPanel implements Runnable {
+public class FeuCirculation extends JPanel {
+
 	private static final long serialVersionUID = 1L;
-	private int m1=3200,m2=2000, carreHeight;
-	private double frottement=0.8,angle=45;
-	private Color cFond=Color.WHITE, cRoute=Color.BLACK, cCarre=Color.GREEN;
-	private Rectangle2D.Double carreAngle;
-	private boolean carreDeplace=false, carreFonctionnel=true;
-	private Image auto1,auto2, background;
-	private int posAuto1=0,posAuto2=0;
-	private boolean estAnimee=false;
-	private double v1=35,v2=0;
-	private double dt=0.03;
-	private double pixelParM;
-	private Thread proc;
-	private double tailleAuto=0.04;
-	private double v2Carre;
-	private double vraiePosAuto1=0,vraiePosAuto2=0;
-	private final EventListenerList ecouteurs=new EventListenerList();
-	private int tailleCarre=10;
-	private int posVitesseX,posVitesseY;
-	
+	private Image feuCirc;
+	private Color feu=Color.red;
+	private Color rOff=Color.red.darker(), vOff=Color.green.darker(), jOff=Color.yellow.darker();
+	private double factX;
+	private int alY=(int)(factX*85);
+	private boolean drawFeu = false;
+
+
 	/**
-	 * Crée un nouveau composant simulation
-	 * 
+	 * Create the panel.
 	 */
-	public Simulation() {
-		addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				if(carreDeplace){
-					if(e.getY()<=0){
-						carreHeight=0;
-						angle=45;
-					}else{
-						if(e.getY()>=getHeight()*9/10){
-							carreHeight=getHeight()*9/10;
-							angle=0;
-						}else{
-							carreHeight=e.getY();
-							angle=Math.toDegrees((Math.atan(((double)(getHeight()*9)/10-carreHeight)*2/getWidth())));
-						}
-					}
-					
-					fireAngleChange();
-					repaint();
-				}
-			}
-		});
-		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				if(carreAngle.contains(getMousePosition())&&carreFonctionnel){
-					carreDeplace=true;
-					cCarre=Color.RED;
-					repaint();
-				}
-				
-			}
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				carreDeplace=false;
-				if(carreFonctionnel){
-					cCarre=Color.GREEN;
-				}
-				repaint();
-			}
-		});
-		
-		
-		
-		setPreferredSize(new Dimension(1000,320));
-		setBackground(cFond);
-		
-		URL fichierAuto1= getClass().getClassLoader().getResource("autoVerte.png");
+	public FeuCirculation() {
+		setOpaque(false);
+		setPreferredSize(new Dimension(300, 300));
+		URL fichierFeu= getClass().getClassLoader().getResource("feuCirculation.gif");
 		try {
-			auto1=ImageIO.read(fichierAuto1);
+			feuCirc=ImageIO.read(fichierFeu);
 		}
 		catch(IOException e){
 			System.out.println("Erreur");
 		}
-		
-		URL fichierAuto2= getClass().getClassLoader().getResource("autoRouge.png");
-		try {
-			auto2=ImageIO.read(fichierAuto2);
-		}
-		catch(IOException e){
-			System.out.println("Erreur");
-		}
-		
-		URL fichierBackground= getClass().getClassLoader().getResource("background.jpg");
-		try {
-			background=ImageIO.read(fichierBackground);
-		}
-		catch(IOException e){
-			System.out.println("Erreur");
-		}
-		
-		
-		
-		
+
+
 	}
-	
-	
-	/**
-	 * Méthode qui calcule la position des voitures et responsable de l'animation
-	 * 
-	 */
-	@Override
-	public void run() {
-		while (estAnimee){
-			if(vraiePosAuto1+v1*dt*pixelParM<getWidth()/2-getWidth()*tailleAuto){
-				vraiePosAuto1=vraiePosAuto1+v1*dt*pixelParM;
-				posAuto1=(int) (vraiePosAuto1);
-				fireEstAnime();
-			}else{
-				posAuto1=(int) (getWidth()/2-getWidth()*tailleAuto);
-				v2Carre=(m1*v1*v1*0.5-frottement*m2*9.8*Math.cos(Math.toRadians(angle))*vraiePosAuto2/pixelParM-m2*9.8*vraiePosAuto2/pixelParM*Math.sin(Math.toRadians(angle)))*2/m2;
-				
-				if(v2Carre>0){
-					v2= Math.sqrt(v2Carre);
-					vraiePosAuto2= (vraiePosAuto2+v2*dt*pixelParM);
-					posAuto2=(int)(vraiePosAuto2);
-					fireEstAnime();
-				}else{
-					v2=0;
-					fireAnimationTermine();
-					
-					estAnimee=false;
-				}
-				
-				
-			}
-			
-			repaint();
-			try {
-				Thread.sleep((long)(dt*1000));
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		
-	}
-	
-	
-	/**
-	 * Dessine le composant
-	 * 
-	 */
-	
+
 	@Override
 	public void paintComponent(Graphics g){
-		
+
 		super.paintComponent(g);
 		Graphics2D g2d=(Graphics2D)g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.drawImage(background, 0, 0, getWidth(), getHeight()*9/10, null);
-		GeneralPath sol=new GeneralPath();
-		sol.moveTo(getWidth()/2, getHeight()*9/10);
-		sol.lineTo(getWidth(),carreHeight);
-		sol.lineTo(getWidth(), getHeight()*9/10);
-		sol.closePath();
-		g2d.setColor(cFond);
-		g2d.fill(sol);
-		
-		g2d.translate(0, getHeight()*9/10);
-		
-		g2d.drawImage(auto1, posAuto1, (int)(-getWidth()/2*tailleAuto), (int)(getWidth()*tailleAuto), (int)(getWidth()/2*tailleAuto), null);
-		g2d.scale(1, -1);
-				
-		g2d.setColor(cRoute);
-		g2d.drawLine(0, 0, getWidth()/2, 0);
-		for(int i=getWidth()/2;i<=getWidth();i=i+10){
-			g2d.drawLine(i, 0, i+5, 0);
-		}
-		
-		
+		g2d.drawImage(feuCirc, 0, 0, getWidth(), getHeight(), null);
 
-		g2d.drawArc(getWidth()/3, -getWidth()/6, getWidth()/3, getWidth()/3, 0, -(int) angle);
-		g2d.scale(1, -1);
-		if(angle>=5){
-			g2d.drawString("Angle : "+Math.floor(angle*100)/100+"°", (int) (getWidth()/6*Math.cos(Math.toRadians(angle/2)))+getWidth()/2+4, -(int) (getWidth()/6*Math.sin(Math.toRadians(angle/2))));
-		}
-		g2d.scale(1, -1);
+		g2d.setColor(rOff);
+		g2d.fillOval((int) (factX*171),(int) (factX* 112),(int) (factX* 52), (int) (factX*52));
 
-		
-		g2d.rotate(angle*Math.PI/180,getWidth()/2,0);
-		g2d.drawLine(getWidth()/2, 0, (int) (getWidth()+getHeight()*Math.sin(Math.toRadians(angle))),0);
-		
-		g2d.translate(getWidth()/2, 0);
-		g2d.scale(1, -1);
-				
-		g2d.drawImage(auto2, posAuto2, (int)(-getWidth()/2*tailleAuto+2), (int)(getWidth()*tailleAuto), (int)(getWidth()/2*tailleAuto-2), null);
-		
-		
-		posVitesseX=posAuto2-5;
-		posVitesseY=(int) (-tailleAuto*getWidth()/2-2);
-		if(posAuto2>getWidth()/2/Math.cos(Math.toRadians(angle))-100){
-			posVitesseX=(int) (getWidth()/2/Math.cos(Math.toRadians(angle))-100);
+		g2d.setColor(jOff);
+		g2d.fillOval((int) (factX*171), (int) (factX*177),(int) (factX* 52),(int) (factX* 52));
+
+		g2d.setColor(vOff);
+		g2d.fillOval((int) (factX*171), (int) (factX*241), (int) (factX*52), (int) (factX*52));
+
+		if(drawFeu){
+			feu=feu.brighter();
+			feu=feu.brighter();
+			g2d.setColor(feu);
+			g2d.fillOval((int)(factX*171), alY, (int) (factX*52), (int) (factX*52));
 		}
-		g2d.setColor(Color.white);
-		g2d.fillRect(posVitesseX-5, posVitesseY-13, 110, 15);
-		g2d.setColor(Color.black);
-		g2d.drawRect(posVitesseX-5, posVitesseY-13, 110, 15);
-		g2d.drawString("Vitesse: "+Math.floor(v2*100)/100+" m/s", posVitesseX,posVitesseY );
-		
-		
-		g2d.drawLine(0, 5, posAuto2, 5);
-		
-		g2d.setColor(Color.white);
-		g2d.fillRect(-5,8,140,15);
-		g2d.setColor(Color.black);
-		g2d.drawRect(-5,8,140,15);
-		
-		g2d.drawString("Déplacement: "+Math.floor(vraiePosAuto2/pixelParM*100)/100+" m.", 0, 20);
-		g2d.translate(-getWidth()/2, 0);
-		g2d.rotate(angle*Math.PI/180,getWidth()/2,0);
-		
-		g2d.translate(0, -getHeight()*9/10);
-		g2d.setColor(cCarre);
-		carreAngle=new Rectangle2D.Double(getWidth()-tailleCarre, carreHeight-tailleCarre/2, tailleCarre, tailleCarre);
-		g2d.fill(carreAngle);
-		
-	
+
+
+
 	}
-	/**
-	 * Méthode qui permet de changer les dimensions du composant de façon à ce qu'il reste avec les même proportions
-	 * @param x Position en x
-	 * @param y Position en Y
-	 * @param width Longueur du composant
-	 * @param height Hauteur du composant
-	 * 
-	 */
+
 	@Override
 	public void setBounds(int x, int y, int width, int height){
-		super.setBounds(x,y,width,(int)(Math.tan((double)(45)/180*Math.PI)*width/2*10/9));
-		pixelParM=(double)(width)/200;
-	}
-	
-
-	/**
-	 * Retourne la masse du premier véhicule
-	 * @return m1 Masse du premier véhicule
-	 */
-	public int getM1() {
-		return m1;
-	}
-
-	public void setM1(int m1) {
-		this.m1 = m1;
-		repaint();
-	}
-
-	public int getM2() {
-		return m2;
-	}
-
-	public void setM2(int m2) {
-		this.m2 = m2;
-		repaint();
-	}
-
-	public double getV1() {
-		return v1;
-	}
-
-	public void setV1(double v1) {
-		this.v1 = v1;
-		repaint();
-	}
-
-	public double getFrottement() {
-		return frottement;
-	}
-
-	public void setFrottement(double frottement) {
-		this.frottement = frottement;
-	}
-
-	public double getAngle() {
-		return angle;
-	}
-
-	public void setAngle(double angle) {
-		if(angle>90){
-			this.angle=90;
+		if (width>height){
+			super.setBounds(x,y,width,width);
+			factX=(double)(width)/400;
 		}else{
-			if(angle<0){
-				this.angle=0;
-			}else{
-				this.angle = angle;
-			}
+			super.setBounds(x,y,height,height);
+			factX=(double)(height)/400;
 		}
-		carreHeight=(int)(getHeight()*9/10-Math.tan(Math.toRadians(angle))*getWidth()/2);
+		
+	}
+
+
+	public Color getFeu() {
+		return feu;
+	}
+
+	public void setFeu(Feu couleur) {
+		switch(couleur){
+		case Vert: alY= (int)(factX*241); feu=Color.green; drawFeu=true;
+		break;
+		case Jaune: alY=(int)(factX*177); feu=Color.yellow; drawFeu=true;
+		break;
+		case Rouge: alY=(int)(factX*112); feu=Color.red; drawFeu=true;
+		break;
+		case Aucune: drawFeu=false;
+		break;
+		}
 		repaint();
-		
-	}
-	
-	public void animer(){
-		carreFonctionnel=false;
-		cCarre=Color.BLACK;
-		estAnimee=true;
-		proc=new Thread(this);
-		proc.start();
-		
-		
-	}
-	
-	public void pauser(){
-		estAnimee=false;
-	}
-	
-	public void arreter(){
-		cCarre=Color.GREEN;
-		carreFonctionnel=true;
-		estAnimee=false;
-		posAuto1=0;
-		vraiePosAuto2=0;
-		vraiePosAuto1=0;
-		posAuto2=0;
-		v2=0;
-		repaint();
-	}
-	
-	public double getV2(){
-		return v2;
+
 	}
 
-	public double getDeplace(){
-		return vraiePosAuto2/pixelParM;
-	}
-	
-	public double getDt() {
-		return dt;
-	}
 
-	public void setDt(double dt) {
-		this.dt = dt;
-	}
 
-	public void addSimListener(SimListener ecout){
-		ecouteurs.add(SimListener.class, ecout);
-	}
-	private void fireAnimationTermine(){
-		for (SimListener ecout:ecouteurs.getListeners(SimListener.class)){
-			ecout.animationTermine();
-		}
-	}
-	private void fireAngleChange(){
-		for(SimListener ecout:ecouteurs.getListeners(SimListener.class)){
-			ecout.angleChange();
-		}
-	}
-	private void fireEstAnime(){
-		for (SimListener ecout:ecouteurs.getListeners(SimListener.class)){
-			ecout.estAnime();
-		}
-	}
-
-	
 
 }
