@@ -1,4 +1,3 @@
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -10,23 +9,19 @@ import javax.swing.JButton;
 import javax.swing.JToggleButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JCheckBox;
 import javax.swing.border.LineBorder;
-import javax.swing.JSplitPane;
-import javax.swing.border.EtchedBorder;
-import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.JTextField;
-import javax.swing.JLayeredPane;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 
 
 public class Application extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel panel;
 	private JPanel panel_1;
@@ -294,9 +289,11 @@ public class Application extends JFrame {
 
 		simulation = new Simulation();
 		simulation.addSimListener(new SimListener() {
+			@Override
 			public void angleChange() {
 				spnAngle.setValue(simulation.getAngle());
 			}
+			@Override
 			public void animationTermine() {
 				feuCirculation.setFeu(Feu.Rouge);
 
@@ -305,8 +302,18 @@ public class Application extends JFrame {
 				tglPlayPause.setText("Play");
 				tglPlayPause.setEnabled(false);
 				btnStop.setText("Reset");
+				
+				textVitesse.setText(Double.toString((double) simulation.getV2()));
+				textDeplace.setText(Double.toString((double) simulation.getDeplace()));
 			}
+			@Override
 			public void estAnime() {
+				textVitesse.setText(Double.toString((double) simulation.getV2()));
+				textDeplace.setText(Double.toString((double) simulation.getDeplace()));
+
+			}
+			@Override
+			public void animationDebut() {
 				//BLOCK DISABLE
 				spnVitesse.setEnabled(false);
 				spnAngle.setEnabled(false);
@@ -315,11 +322,9 @@ public class Application extends JFrame {
 				spnMasse2.setEnabled(false);
 				btnCorrection.setEnabled(false);
 				spnFPS.setEnabled(false);
-
+				
 				feuCirculation.setFeu(Feu.Vert);
-				textVitesse.setText(Double.toString((double) simulation.getV2()));
-				textDeplace.setText(Double.toString((double) simulation.getDeplace()));
-
+				
 			}
 		});
 		simulation.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -330,7 +335,7 @@ public class Application extends JFrame {
 
 		feuCirculation = new FeuCirculation();
 		feuCirculation.setFeu(Feu.Aucune);
-		feuCirculation.setBounds(10, 11, 337, 344);
+		feuCirculation.setBounds(10, 10, 340, 360);
 		simulation.add(feuCirculation);
 	}
 }
