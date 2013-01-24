@@ -21,6 +21,8 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.JTextField;
 import javax.swing.JLayeredPane;
+import javax.swing.SwingConstants;
+import java.awt.Font;
 
 
 public class Application extends JFrame {
@@ -51,6 +53,10 @@ public class Application extends JFrame {
 	private JTextField textVitesse;
 	private JTextField textDeplace;
 	private FeuCirculation feuCirculation;
+	private JSpinner spnFPS;
+	private JLabel lblFps;
+
+	private double fps = 0.03;
 
 	/**
 	 * Launch the application.
@@ -110,15 +116,15 @@ public class Application extends JFrame {
 		panel.add(lblMasse1);
 
 		lblMasse2 = new JLabel("Masse 2");
-		lblMasse2.setBounds(200, 11, 82, 14);
+		lblMasse2.setBounds(200, 11, 78, 14);
 		panel.add(lblMasse2);
 
 		lblCoeff = new JLabel("Coeff");
 		lblCoeff.setBounds(10, 50, 46, 14);
 		panel.add(lblCoeff);
 
-		lblNewLabel_3 = new JLabel("Angle (Maximum 30)");
-		lblNewLabel_3.setBounds(200, 50, 117, 14);
+		lblNewLabel_3 = new JLabel("Angle");
+		lblNewLabel_3.setBounds(200, 50, 39, 14);
 		panel.add(lblNewLabel_3);
 
 		lblVitesse = new JLabel("Vitesse");
@@ -142,7 +148,7 @@ public class Application extends JFrame {
 			}
 		});
 		spnMasse2.setModel(new SpinnerNumberModel(new Integer(2000), new Integer(100), null, new Integer(10)));
-		spnMasse2.setBounds(253, 8, 113, 20);
+		spnMasse2.setBounds(290, 8, 76, 20);
 		panel.add(spnMasse2);
 
 		spnCoeff = new JSpinner();
@@ -172,7 +178,7 @@ public class Application extends JFrame {
 			}
 		});
 		spnAngle.setModel(new SpinnerNumberModel(20.0, 0.0, 30.0, 0.1));
-		spnAngle.setBounds(327, 47, 39, 20);
+		spnAngle.setBounds(251, 48, 39, 20);
 		panel.add(spnAngle);
 
 		lblKg = new JLabel("kg");
@@ -188,7 +194,7 @@ public class Application extends JFrame {
 		panel.add(lblMs);
 
 		lblO = new JLabel("o");
-		lblO.setBounds(369, 41, 52, 16);
+		lblO.setBounds(290, 41, 52, 16);
 		panel.add(lblO);
 
 		panel_1 = new JPanel();
@@ -207,17 +213,35 @@ public class Application extends JFrame {
 		panel_1.add(btnQuittez);
 
 		textVitesse = new JTextField();
+		textVitesse.setFont(new Font("Segoe UI", Font.PLAIN, 50));
+		textVitesse.setHorizontalAlignment(SwingConstants.CENTER);
 		textVitesse.setEditable(false);
-		textVitesse.setBounds(10, 39, 174, 62);
+		textVitesse.setBounds(12, 11, 181, 78);
 		panel_1.add(textVitesse);
 		textVitesse.setColumns(10);
 
 		textDeplace = new JTextField();
+		textDeplace.setFont(new Font("Segoe UI", Font.PLAIN, 50));
 		textDeplace.setEditable(false);
 		textDeplace.setText("");
-		textDeplace.setBounds(213, 39, 86, 20);
+		textDeplace.setBounds(205, 11, 183, 78);
 		panel_1.add(textDeplace);
 		textDeplace.setColumns(10);
+
+		spnFPS = new JSpinner();
+		spnFPS.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				fps=1/(double)spnFPS.getValue();
+				simulation.setDt(fps);
+			}
+		});
+		spnFPS.setModel(new SpinnerNumberModel(new Double(33), new Double(1), null, new Double(1)));
+		spnFPS.setBounds(22, 97, 51, 20);
+		panel_1.add(spnFPS);
+
+		lblFps = new JLabel("fps");
+		lblFps.setBounds(85, 99, 46, 14);
+		panel_1.add(lblFps);
 
 		panel_2 = new JPanel();
 		panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -242,6 +266,9 @@ public class Application extends JFrame {
 				spnMasse2.setEnabled(true);
 				btnCorrection.setEnabled(true);
 				tglPlayPause.setEnabled(true);
+				spnFPS.setEnabled(true);
+				textVitesse.setText("0.0");
+				textDeplace.setText("0.0");
 			}
 		});
 		btnStop.setBounds(20, 82, 140, 23);
@@ -274,16 +301,10 @@ public class Application extends JFrame {
 				feuCirculation.setFeu(Feu.Rouge);
 
 				//BLOCK REENABLE
-				spnVitesse.setEnabled(true);
-				spnAngle.setEnabled(true);
-				spnCoeff.setEnabled(true);
-				spnMasse1.setEnabled(true);
-				spnMasse2.setEnabled(true);
-				btnCorrection.setEnabled(true);
+
 				tglPlayPause.setText("Play");
 				tglPlayPause.setEnabled(false);
 				btnStop.setText("Reset");
-
 			}
 			public void estAnime() {
 				//BLOCK DISABLE
@@ -293,10 +314,11 @@ public class Application extends JFrame {
 				spnMasse1.setEnabled(false);
 				spnMasse2.setEnabled(false);
 				btnCorrection.setEnabled(false);
+				spnFPS.setEnabled(false);
 
 				feuCirculation.setFeu(Feu.Vert);
-				textVitesse.setText(Double.toString(simulation.getV2()));
-				textDeplace.setText(Double.toString(simulation.getDeplace()));
+				textVitesse.setText(Double.toString((double) simulation.getV2()));
+				textDeplace.setText(Double.toString((double) simulation.getDeplace()));
 
 			}
 		});
