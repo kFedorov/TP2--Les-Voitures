@@ -50,6 +50,7 @@ public class Application extends JFrame {
 	private JLabel lblO;
 	private JTextField textVitesse;
 	private JTextField textDeplace;
+	private FeuCirculation feuCirculation;
 
 	/**
 	 * Launch the application.
@@ -73,7 +74,7 @@ public class Application extends JFrame {
 	public Application() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1040, 520);
+		setBounds(100, 100, 1046, 753);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -81,7 +82,7 @@ public class Application extends JFrame {
 
 		panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel.setBounds(11, 342, 399, 129);
+		panel.setBounds(13, 585, 399, 129);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
@@ -192,7 +193,7 @@ public class Application extends JFrame {
 
 		panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_1.setBounds(611, 342, 400, 129);
+		panel_1.setBounds(614, 585, 400, 129);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 
@@ -220,16 +221,27 @@ public class Application extends JFrame {
 
 		panel_2 = new JPanel();
 		panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_2.setBounds(420, 342, 182, 129);
+		panel_2.setBounds(422, 585, 182, 129);
 		contentPane.add(panel_2);
 		panel_2.setLayout(null);
 
 		btnStop = new JButton("Stop");
 		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(btnStop.getText()=="Reset"){
+					btnStop.setText("Stop");
+				}
+				feuCirculation.setFeu(Feu.Aucune);
 				simulation.arreter();
 				tglPlayPause.setSelected(false);
 				tglPlayPause.setText("Play");
+				spnVitesse.setEnabled(true);
+				spnAngle.setEnabled(true);
+				spnCoeff.setEnabled(true);
+				spnMasse1.setEnabled(true);
+				spnMasse2.setEnabled(true);
+				btnCorrection.setEnabled(true);
+				tglPlayPause.setEnabled(true);
 			}
 		});
 		btnStop.setBounds(20, 82, 140, 23);
@@ -241,9 +253,12 @@ public class Application extends JFrame {
 				if (tglPlayPause.isSelected()){
 					tglPlayPause.setText("Pause");
 					simulation.animer();
+					feuCirculation.setFeu(Feu.Vert);
+
 				}else{
 					tglPlayPause.setText("Play");
 					simulation.pauser();
+					feuCirculation.setFeu(Feu.Jaune);
 				}
 			}
 		});
@@ -256,18 +271,44 @@ public class Application extends JFrame {
 				spnAngle.setValue(simulation.getAngle());
 			}
 			public void animationTermine() {
+				feuCirculation.setFeu(Feu.Rouge);
+
+				//BLOCK REENABLE
+				spnVitesse.setEnabled(true);
+				spnAngle.setEnabled(true);
+				spnCoeff.setEnabled(true);
+				spnMasse1.setEnabled(true);
+				spnMasse2.setEnabled(true);
+				btnCorrection.setEnabled(true);
+				tglPlayPause.setText("Play");
+				tglPlayPause.setEnabled(false);
+				btnStop.setText("Reset");
+
 			}
 			public void estAnime() {
+				//BLOCK DISABLE
+				spnVitesse.setEnabled(false);
+				spnAngle.setEnabled(false);
+				spnCoeff.setEnabled(false);
+				spnMasse1.setEnabled(false);
+				spnMasse2.setEnabled(false);
+				btnCorrection.setEnabled(false);
 
-
+				feuCirculation.setFeu(Feu.Vert);
 				textVitesse.setText(Double.toString(simulation.getV2()));
 				textDeplace.setText(Double.toString(simulation.getDeplace()));
 
 			}
 		});
-		simulation.setBorder(null);
-		simulation.setBounds(11, 11, 1000, 350);
+		simulation.setBorder(new LineBorder(new Color(0, 0, 0)));
+		simulation.setBounds(13, 11, 1000, 350);
 		simulation.setAngle(20);
 		contentPane.add(simulation);
+		simulation.setLayout(null);
+
+		feuCirculation = new FeuCirculation();
+		feuCirculation.setFeu(Feu.Aucune);
+		feuCirculation.setBounds(10, 11, 337, 344);
+		simulation.add(feuCirculation);
 	}
 }
