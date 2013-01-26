@@ -59,7 +59,6 @@ public class FeuCirculation extends JPanel {
 			feu=feu.brighter();
 			g2d.setColor(feu);
 			g2d.fillOval((int)(factX*(double)170), alY, (int)(factX*55),(int)(factX*55));
-			System.out.println(alY);
 		}
 
 
