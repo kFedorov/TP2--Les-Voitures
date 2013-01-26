@@ -11,6 +11,8 @@ import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Aide extends JFrame {
 
@@ -57,6 +59,11 @@ public class Aide extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		btnQuitter = new JButton("Quitter");
+		btnQuitter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+			}
+		});
 		contentPane.add(btnQuitter, BorderLayout.SOUTH);
 		
 		scrollPane = new JScrollPane();
