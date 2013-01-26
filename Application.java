@@ -17,6 +17,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 
 public class Application extends JFrame {
@@ -50,8 +52,12 @@ public class Application extends JFrame {
 	private FeuCirculation feuCirculation;
 	private JSpinner spnFPS;
 	private JLabel lblFps;
+	private Aide aide;
 
 	private double fps = 0.03;
+	private double toFloor;
+	private JMenuBar menuBar;
+	private JMenuItem mbtnAide;
 
 	/**
 	 * Launch the application.
@@ -73,6 +79,7 @@ public class Application extends JFrame {
 	 * Create the frame.
 	 */
 	public Application() {
+		setTitle("Simulateur de Collisions - Fedorov, Miriello");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1046, 753);
@@ -208,6 +215,7 @@ public class Application extends JFrame {
 		panel_1.add(btnQuittez);
 
 		textVitesse = new JTextField();
+		textVitesse.setText("0.0");
 		textVitesse.setFont(new Font("Segoe UI", Font.PLAIN, 50));
 		textVitesse.setHorizontalAlignment(SwingConstants.CENTER);
 		textVitesse.setEditable(false);
@@ -216,9 +224,10 @@ public class Application extends JFrame {
 		textVitesse.setColumns(10);
 
 		textDeplace = new JTextField();
+		textDeplace.setHorizontalAlignment(SwingConstants.CENTER);
 		textDeplace.setFont(new Font("Segoe UI", Font.PLAIN, 50));
 		textDeplace.setEditable(false);
-		textDeplace.setText("");
+		textDeplace.setText("0.0");
 		textDeplace.setBounds(205, 11, 183, 78);
 		panel_1.add(textDeplace);
 		textDeplace.setColumns(10);
@@ -275,7 +284,7 @@ public class Application extends JFrame {
 				if (tglPlayPause.isSelected()){
 					tglPlayPause.setText("Pause");
 					simulation.animer();
-					
+
 					//BLOCK DISABLE
 					spnVitesse.setEnabled(false);
 					spnAngle.setEnabled(false);
@@ -284,7 +293,7 @@ public class Application extends JFrame {
 					spnMasse2.setEnabled(false);
 					btnCorrection.setEnabled(false);
 					spnFPS.setEnabled(false);
-					
+
 					feuCirculation.setFeu(Feu.Vert);
 
 				}else{
@@ -312,26 +321,45 @@ public class Application extends JFrame {
 				tglPlayPause.setText("Play");
 				tglPlayPause.setEnabled(false);
 				btnStop.setText("Reset");
-				
-				textVitesse.setText(Double.toString((double) simulation.getV2()));
-				textDeplace.setText(Double.toString((double) simulation.getDeplace()));
+
+				toFloor = Math.floor(100*((double) simulation.getV2()))/100;
+				textVitesse.setText(Double.toString(toFloor));
+				toFloor = Math.floor(100*((double) simulation.getDeplace()))/100;
+				textDeplace.setText(Double.toString(toFloor));
 			}
 			@Override
 			public void estAnime() {
-				textVitesse.setText(Double.toString((double) simulation.getV2()));
-				textDeplace.setText(Double.toString((double) simulation.getDeplace()));
+				toFloor = Math.floor(100*((double) simulation.getV2()))/100;
+				textVitesse.setText(Double.toString(toFloor));
+				toFloor = Math.floor(100*((double) simulation.getDeplace()))/100;
+				textDeplace.setText(Double.toString(toFloor));
 
 			}
 		});
 		simulation.setBorder(new LineBorder(new Color(0, 0, 0)));
-		simulation.setBounds(13, 11, 1000, 350);
+		simulation.setBounds(13, 19, 1000, 350);
 		simulation.setAngle(20);
 		contentPane.add(simulation);
 		simulation.setLayout(null);
 
 		feuCirculation = new FeuCirculation();
 		feuCirculation.setFeu(Feu.Aucune);
-		feuCirculation.setBounds(10, 10, 340, 360);
+		feuCirculation.setBounds(10, 10, 248, 256);
 		simulation.add(feuCirculation);
+
+		menuBar = new JMenuBar();
+		menuBar.setBounds(0, 0, 171, 21);
+		contentPane.add(menuBar);
+
+		aide = new Aide();
+		aide.setVisible(false);
+
+		mbtnAide = new JMenuItem("Aide");
+		mbtnAide.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				aide.setVisible(true);
+			}
+		});
+		menuBar.add(mbtnAide);
 	}
 }
