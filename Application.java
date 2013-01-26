@@ -61,6 +61,10 @@ public class Application extends JFrame {
 	private JMenuBar menuBar;
 	private JMenuItem mbtnAide;
 	private JMenu mnAide;
+	private JLabel lblVitesse_1;
+	private JLabel lblDplacement;
+	private JLabel lblMs_1;
+	private JLabel lblM;
 
 	/**
 	 * Launch the application.
@@ -219,20 +223,20 @@ public class Application extends JFrame {
 		panel_1.add(btnQuittez);
 
 		textVitesse = new JTextField();
-		textVitesse.setText("0.0m/s");
-		textVitesse.setFont(new Font("Segoe UI", Font.PLAIN, 40));
-		textVitesse.setHorizontalAlignment(SwingConstants.CENTER);
+		textVitesse.setText("0.0");
+		textVitesse.setFont(new Font("Segoe UI", Font.PLAIN, 50));
+		textVitesse.setHorizontalAlignment(SwingConstants.LEFT);
 		textVitesse.setEditable(false);
-		textVitesse.setBounds(12, 11, 181, 78);
+		textVitesse.setBounds(12, 29, 122, 60);
 		panel_1.add(textVitesse);
 		textVitesse.setColumns(10);
 
 		textDeplace = new JTextField();
-		textDeplace.setHorizontalAlignment(SwingConstants.CENTER);
+		textDeplace.setHorizontalAlignment(SwingConstants.LEFT);
 		textDeplace.setFont(new Font("Segoe UI", Font.PLAIN, 50));
 		textDeplace.setEditable(false);
-		textDeplace.setText("0.0m");
-		textDeplace.setBounds(205, 11, 183, 78);
+		textDeplace.setText("0.0");
+		textDeplace.setBounds(205, 29, 129, 60);
 		panel_1.add(textDeplace);
 		textDeplace.setColumns(10);
 
@@ -250,6 +254,24 @@ public class Application extends JFrame {
 		lblFps = new JLabel("Images par Seconde");
 		lblFps.setBounds(85, 99, 108, 14);
 		panel_1.add(lblFps);
+
+		lblVitesse_1 = new JLabel("Vitesse");
+		lblVitesse_1.setBounds(10, 11, 183, 14);
+		panel_1.add(lblVitesse_1);
+
+		lblDplacement = new JLabel("D\u00E9placement");
+		lblDplacement.setBounds(205, 11, 185, 14);
+		panel_1.add(lblDplacement);
+
+		lblMs_1 = new JLabel("m/s");
+		lblMs_1.setFont(new Font("Tahoma", Font.PLAIN, 35));
+		lblMs_1.setBounds(137, 56, 68, 33);
+		panel_1.add(lblMs_1);
+
+		lblM = new JLabel("m");
+		lblM.setFont(new Font("Tahoma", Font.PLAIN, 35));
+		lblM.setBounds(339, 55, 38, 34);
+		panel_1.add(lblM);
 
 		panel_2 = new JPanel();
 		panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -275,8 +297,8 @@ public class Application extends JFrame {
 				btnCorrection.setEnabled(true);
 				tglPlayPause.setEnabled(true);
 				spnFPS.setEnabled(true);
-				textVitesse.setText("0.0m");
-				textDeplace.setText("0.0m");
+				textVitesse.setText("0.0");
+				textDeplace.setText("0.0");
 			}
 		});
 		btnStop.setBounds(20, 82, 140, 23);
@@ -327,16 +349,16 @@ public class Application extends JFrame {
 				btnStop.setText("Reset");
 
 				toFloor = Math.floor(100*((double) simulation.getV2()))/100;
-				textVitesse.setText(Double.toString(toFloor)+"m/s");
+				textVitesse.setText(Double.toString(toFloor));
 				toFloor = Math.floor(100*((double) simulation.getDeplace()))/100;
-				textDeplace.setText(Double.toString(toFloor)+"m");
+				textDeplace.setText(Double.toString(toFloor));
 			}
 			@Override
 			public void estAnime() {
 				toFloor = Math.floor(100*((double) simulation.getV2()))/100;
-				textVitesse.setText(Double.toString(toFloor)+"m/s");
+				textVitesse.setText(Double.toString(toFloor));
 				toFloor = Math.floor(100*((double) simulation.getDeplace()))/100;
-				textDeplace.setText(Double.toString(toFloor)+"m");
+				textDeplace.setText(Double.toString(toFloor));
 
 			}
 		});
