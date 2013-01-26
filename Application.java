@@ -19,6 +19,8 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JMenu;
+import java.awt.Point;
 
 
 public class Application extends JFrame {
@@ -58,6 +60,7 @@ public class Application extends JFrame {
 	private double toFloor;
 	private JMenuBar menuBar;
 	private JMenuItem mbtnAide;
+	private JMenu mnAide;
 
 	/**
 	 * Launch the application.
@@ -82,15 +85,16 @@ public class Application extends JFrame {
 		setTitle("Simulateur de Collisions - Fedorov, Miriello");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1046, 753);
+		setBounds(100, 100, 1029, 772);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.LIGHT_GRAY);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel.setBounds(13, 585, 399, 129);
+		panel.setBounds(13, 604, 399, 129);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
@@ -201,7 +205,7 @@ public class Application extends JFrame {
 
 		panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_1.setBounds(614, 585, 400, 129);
+		panel_1.setBounds(614, 604, 400, 129);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 
@@ -243,13 +247,13 @@ public class Application extends JFrame {
 		spnFPS.setBounds(22, 97, 51, 20);
 		panel_1.add(spnFPS);
 
-		lblFps = new JLabel("fps");
-		lblFps.setBounds(85, 99, 46, 14);
+		lblFps = new JLabel("Images par Seconde");
+		lblFps.setBounds(85, 99, 108, 14);
 		panel_1.add(lblFps);
 
 		panel_2 = new JPanel();
 		panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_2.setBounds(422, 585, 182, 129);
+		panel_2.setBounds(422, 604, 182, 129);
 		contentPane.add(panel_2);
 		panel_2.setLayout(null);
 
@@ -337,29 +341,32 @@ public class Application extends JFrame {
 			}
 		});
 		simulation.setBorder(new LineBorder(new Color(0, 0, 0)));
-		simulation.setBounds(13, 19, 1000, 350);
+		simulation.setBounds(13, 32, 1000, 350);
 		simulation.setAngle(20);
 		contentPane.add(simulation);
 		simulation.setLayout(null);
 
 		feuCirculation = new FeuCirculation();
 		feuCirculation.setFeu(Feu.Aucune);
-		feuCirculation.setBounds(10, 10, 300, 300);
+		feuCirculation.setBounds(0, 0, 300, 300);
 		simulation.add(feuCirculation);
 
 		menuBar = new JMenuBar();
-		menuBar.setBounds(0, 0, 171, 21);
+		menuBar.setBounds(0, 0, 1023, 21);
 		contentPane.add(menuBar);
 
 		aide = new Aide();
 		aide.setVisible(false);
 
+		mnAide = new JMenu("Options");
+		menuBar.add(mnAide);
+
 		mbtnAide = new JMenuItem("Aide");
+		mnAide.add(mbtnAide);
 		mbtnAide.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				aide.setVisible(true);
 			}
 		});
-		menuBar.add(mbtnAide);
 	}
 }
