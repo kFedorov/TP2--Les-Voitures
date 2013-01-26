@@ -344,7 +344,7 @@ public class Application extends JFrame {
 
 		feuCirculation = new FeuCirculation();
 		feuCirculation.setFeu(Feu.Aucune);
-		feuCirculation.setBounds(10, 10, 444, 359);
+		feuCirculation.setBounds(10, 10, 300, 300);
 		simulation.add(feuCirculation);
 
 		menuBar = new JMenuBar();
