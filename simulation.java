@@ -430,11 +430,6 @@ public class Simulation extends JPanel implements Runnable {
 		this.dt = dt;
 	}
 
-	public void setCarreHeight(int angle){
-		carreHeight = (int) (getWidth()*Math.tan(angle));
-		//angle=(int) (((double)(getHeight()*9)/10-carreHeight)*2/getWidth());
-		repaint();
-	}
 
 	/**
 	 * Méthode qui permet d'ajouter des écouteurs personnalisés sur la simulation
