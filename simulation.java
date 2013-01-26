@@ -44,7 +44,7 @@ public class Simulation extends JPanel implements Runnable {
 	private final EventListenerList ecouteurs=new EventListenerList();
 	private int tailleCarre=10;
 	private int posVitesseX,posVitesseY;
-	
+
 	/**
 	 * Crée un nouveau composant simulation
 	 * 
@@ -66,7 +66,7 @@ public class Simulation extends JPanel implements Runnable {
 							angle=Math.toDegrees((Math.atan(((double)(getHeight()*9)/10-carreHeight)*2/getWidth())));
 						}
 					}
-					
+
 					fireAngleChange();
 					repaint();
 				}
@@ -80,7 +80,7 @@ public class Simulation extends JPanel implements Runnable {
 					cCarre=Color.RED;
 					repaint();
 				}
-				
+
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -91,12 +91,12 @@ public class Simulation extends JPanel implements Runnable {
 				repaint();
 			}
 		});
-		
-		
-		
+
+
+
 		setPreferredSize(new Dimension(1000,320));
 		setBackground(cFond);
-		
+
 		URL fichierAuto1= getClass().getClassLoader().getResource("autoVerte.png");
 		try {
 			auto1=ImageIO.read(fichierAuto1);
@@ -104,7 +104,7 @@ public class Simulation extends JPanel implements Runnable {
 		catch(IOException e){
 			System.out.println("Erreur");
 		}
-		
+
 		URL fichierAuto2= getClass().getClassLoader().getResource("autoRouge.png");
 		try {
 			auto2=ImageIO.read(fichierAuto2);
@@ -112,7 +112,7 @@ public class Simulation extends JPanel implements Runnable {
 		catch(IOException e){
 			System.out.println("Erreur");
 		}
-		
+
 		URL fichierBackground= getClass().getClassLoader().getResource("background.jpg");
 		try {
 			background=ImageIO.read(fichierBackground);
@@ -120,13 +120,13 @@ public class Simulation extends JPanel implements Runnable {
 		catch(IOException e){
 			System.out.println("Erreur");
 		}
-		
-		
-		
-		
+
+
+
+
 	}
-	
-	
+
+
 	/**
 	 * Méthode qui calcule la position des voitures et responsable de l'animation
 	 * 
@@ -141,7 +141,7 @@ public class Simulation extends JPanel implements Runnable {
 			}else{
 				posAuto1=(int) (getWidth()/2-getWidth()*tailleAuto);
 				v2Carre=(m1*v1*v1*0.5-frottement*m2*9.8*Math.cos(Math.toRadians(angle))*vraiePosAuto2/pixelParM-m2*9.8*vraiePosAuto2/pixelParM*Math.sin(Math.toRadians(angle)))*2/m2;
-				
+
 				if(v2Carre>0){
 					v2= Math.sqrt(v2Carre);
 					vraiePosAuto2= (vraiePosAuto2+v2*dt*pixelParM);
@@ -150,13 +150,13 @@ public class Simulation extends JPanel implements Runnable {
 				}else{
 					v2=0;
 					fireAnimationTermine();
-					
+
 					estAnimee=false;
 				}
-				
-				
+
+
 			}
-			
+
 			repaint();
 			try {
 				Thread.sleep((long)(dt*1000));
@@ -164,18 +164,18 @@ public class Simulation extends JPanel implements Runnable {
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
-	
-	
+
+
 	/**
 	 * Dessine le composant
 	 * 
 	 */
-	
+
 	@Override
 	public void paintComponent(Graphics g){
-		
+
 		super.paintComponent(g);
 		Graphics2D g2d=(Graphics2D)g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -187,19 +187,19 @@ public class Simulation extends JPanel implements Runnable {
 		sol.closePath();
 		g2d.setColor(cFond);
 		g2d.fill(sol);
-		
+
 		g2d.translate(0, getHeight()*9/10);
-		
+
 		g2d.drawImage(auto1, posAuto1, (int)(-getWidth()/2*tailleAuto), (int)(getWidth()*tailleAuto), (int)(getWidth()/2*tailleAuto), null);
 		g2d.scale(1, -1);
-				
+
 		g2d.setColor(cRoute);
 		g2d.drawLine(0, 0, getWidth()/2, 0);
 		for(int i=getWidth()/2;i<=getWidth();i=i+10){
 			g2d.drawLine(i, 0, i+5, 0);
 		}
-		
-		
+
+
 
 		g2d.drawArc(getWidth()/3, -getWidth()/6, getWidth()/3, getWidth()/3, 0, -(int) angle);
 		g2d.scale(1, -1);
@@ -208,16 +208,18 @@ public class Simulation extends JPanel implements Runnable {
 		}
 		g2d.scale(1, -1);
 
-		
+
 		g2d.rotate(angle*Math.PI/180,getWidth()/2,0);
+
 		g2d.drawLine(getWidth()/2, 0, (int) (getWidth()+getHeight()*Math.sin(Math.toRadians(angle))),0);
-		
+
+
 		g2d.translate(getWidth()/2, 0);
 		g2d.scale(1, -1);
-				
+
 		g2d.drawImage(auto2, posAuto2, (int)(-getWidth()/2*tailleAuto+2), (int)(getWidth()*tailleAuto), (int)(getWidth()/2*tailleAuto-2), null);
-		
-		
+
+
 		posVitesseX=posAuto2-5;
 		posVitesseY=(int) (-tailleAuto*getWidth()/2-2);
 		if(posAuto2>getWidth()/2/Math.cos(Math.toRadians(angle))-100){
@@ -228,25 +230,25 @@ public class Simulation extends JPanel implements Runnable {
 		g2d.setColor(Color.black);
 		g2d.drawRect(posVitesseX-5, posVitesseY-13, 110, 15);
 		g2d.drawString("Vitesse: "+Math.floor(v2*100)/100+" m/s", posVitesseX,posVitesseY );
-		
-		
+
 		g2d.drawLine(0, 5, posAuto2, 5);
-		
+
+
 		g2d.setColor(Color.white);
 		g2d.fillRect(-5,8,140,15);
 		g2d.setColor(Color.black);
 		g2d.drawRect(-5,8,140,15);
-		
-		g2d.drawString("Déplacement: "+Math.floor(vraiePosAuto2/pixelParM*100)/100+" m.", 0, 20);
+
+		g2d.drawString("Déplacement: "+Math.floor(vraiePosAuto2/pixelParM*100)/100+" m", 0, 20);
 		g2d.translate(-getWidth()/2, 0);
 		g2d.rotate(angle*Math.PI/180,getWidth()/2,0);
-		
+
 		g2d.translate(0, -getHeight()*9/10);
 		g2d.setColor(cCarre);
 		carreAngle=new Rectangle2D.Double(getWidth()-tailleCarre, carreHeight-tailleCarre/2, tailleCarre, tailleCarre);
 		g2d.fill(carreAngle);
-		
-	
+
+
 	}
 	/**
 	 * Méthode qui permet de changer les dimensions du composant de façon à ce qu'il reste avec les même proportions
@@ -261,7 +263,7 @@ public class Simulation extends JPanel implements Runnable {
 		super.setBounds(x,y,width,(int)(Math.tan((double)(45)/180*Math.PI)*width/2*10/9));
 		pixelParM=(double)(width)/200;
 	}
-	
+
 
 	/**
 	 * Retourne la masse du premier véhicule
@@ -307,7 +309,7 @@ public class Simulation extends JPanel implements Runnable {
 	public double getV1() {
 		return v1;
 	}
-	
+
 	/**
 	 * 
 	 * Permet de donner une valeur à la vitesse de la première voiture
@@ -361,7 +363,7 @@ public class Simulation extends JPanel implements Runnable {
 		}
 		carreHeight=(int)(getHeight()*9/10-Math.tan(Math.toRadians(angle))*getWidth()/2);
 		repaint();
-		
+
 	}
 	/**
 	 * Méthode qui sert à débuter/reprendre l'animation/la simulation.
@@ -372,8 +374,8 @@ public class Simulation extends JPanel implements Runnable {
 		estAnimee=true;
 		proc=new Thread(this);
 		proc.start();
-		
-		
+
+
 	}
 	/**
 	 * Méthode pour arrêter l'animation temporairement et qu'il soit possible de reprendre l'animation.
@@ -395,7 +397,7 @@ public class Simulation extends JPanel implements Runnable {
 		v2=0;
 		repaint();
 	}
-	
+
 	/**
 	 * 
 	 * Retourne la vitesse de la deuxième voiture
@@ -404,7 +406,7 @@ public class Simulation extends JPanel implements Runnable {
 	public double getV2(){
 		return v2;
 	}
-	
+
 	/**
 	 * Retourne la position actuelle de la deuxième voiture en mètres.
 	 * @return Position de la deuxième voiture.
@@ -428,6 +430,12 @@ public class Simulation extends JPanel implements Runnable {
 		this.dt = dt;
 	}
 
+	public void setCarreHeight(int angle){
+		carreHeight = (int) (getWidth()*Math.tan(angle));
+		//angle=(int) (((double)(getHeight()*9)/10-carreHeight)*2/getWidth());
+		repaint();
+	}
+
 	/**
 	 * Méthode qui permet d'ajouter des écouteurs personnalisés sur la simulation
 	 * @param ecout
@@ -435,7 +443,7 @@ public class Simulation extends JPanel implements Runnable {
 	public void addSimListener(SimListener ecout){
 		ecouteurs.add(SimListener.class, ecout);
 	}
-	
+
 	/**
 	 * Avertit les écouteurs que l'animation est terminée
 	 */
@@ -461,6 +469,6 @@ public class Simulation extends JPanel implements Runnable {
 		}
 	}
 
-	
+
 
 }
