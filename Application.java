@@ -323,9 +323,9 @@ public class Application extends JFrame {
 				btnStop.setText("Reset");
 
 				toFloor = Math.floor(100*((double) simulation.getV2()))/100;
-				textVitesse.setText(Double.toString(toFloor));
+				textVitesse.setText(Double.toString(toFloor)+"m");
 				toFloor = Math.floor(100*((double) simulation.getDeplace()))/100;
-				textDeplace.setText(Double.toString(toFloor));
+				textDeplace.setText(Double.toString(toFloor)+"m");
 			}
 			@Override
 			public void estAnime() {
