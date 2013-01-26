@@ -70,11 +70,13 @@ public class Aide extends JFrame {
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		
 		txtpnCetteApplicationPermet = new JTextPane();
+		txtpnCetteApplicationPermet.setEditable(false);
 		txtpnCetteApplicationPermet.setText("Cette application permet de calculer et d'afficher la vitesse et la position d'un objet suite \u00E0 une collision, en tenant compte des param\u00E8tres suivants : la masse des deux objets, la vitesse initiale du premier objet, l'angle de la pente sur laquelle est situ\u00E9 le deuxi\u00E8me objet et le coefficient de friction entre le deuxi\u00E8me objet et la pente.\r\n\r\nINSTRUCTIONS:\r\n -Entrez les param\u00E8tres d\u00E9sir\u00E9s dans les endroits pr\u00E9vus \u00E0 cet effet.\r\n\t\t-Plus l'angle est \u00E9lev\u00E9, moins le deuxi\u00E8me objet ira loin.\r\n\t\t-Plus le coefficient de friction est \u00E9lev\u00E9, moins le deuxi\u00E8me objet ira loin.\r\n\t\t-Plus la vitesse du premier objet est \u00E9lev\u00E9e, plus le  deuxi\u00E8me objet ira loin.\r\n\t\t-plus la masse du premier objet est \u00E9lev\u00E9e, plus le deuxi\u00E8me objet ira loin.\r\n\t\t-Plus la masse du premier objet est \u00E9lev\u00E9e, moins le deuxi\u00E8me objet ira loin.\r\n -Appuyez sur le boutton play pour commencer l'animation.\r\n\t\t-Pour pauser l'animation, appuyez sur pause.\r\n -Vous pouvez en tout temps arr\u00EAter l'animation en appuyant sur arr\u00EAter.\r\n -Apr\u00E8s avoir appuyer sur le bouton \"Arr\u00EAter\", vous pouvez entrer de nouvelles valeurs et recommencer \u00E0 la premi\u00E8re \u00E9tape.");
 		txtpnCetteApplicationPermet.setBackground(Color.WHITE);
 		scrollPane.setViewportView(txtpnCetteApplicationPermet);
 		
 		txtAideInstructions = new JTextField();
+		txtAideInstructions.setEditable(false);
 		txtAideInstructions.setText("Aide - Instructions");
 		txtAideInstructions.setFont(new Font("Tahoma", Font.BOLD, 18));
 		txtAideInstructions.setBackground(UIManager.getColor("Button.background"));
