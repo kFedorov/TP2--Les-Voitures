@@ -275,6 +275,16 @@ public class Application extends JFrame {
 				if (tglPlayPause.isSelected()){
 					tglPlayPause.setText("Pause");
 					simulation.animer();
+					
+					//BLOCK DISABLE
+					spnVitesse.setEnabled(false);
+					spnAngle.setEnabled(false);
+					spnCoeff.setEnabled(false);
+					spnMasse1.setEnabled(false);
+					spnMasse2.setEnabled(false);
+					btnCorrection.setEnabled(false);
+					spnFPS.setEnabled(false);
+					
 					feuCirculation.setFeu(Feu.Vert);
 
 				}else{
@@ -311,20 +321,6 @@ public class Application extends JFrame {
 				textVitesse.setText(Double.toString((double) simulation.getV2()));
 				textDeplace.setText(Double.toString((double) simulation.getDeplace()));
 
-			}
-			@Override
-			public void animationDebut() {
-				//BLOCK DISABLE
-				spnVitesse.setEnabled(false);
-				spnAngle.setEnabled(false);
-				spnCoeff.setEnabled(false);
-				spnMasse1.setEnabled(false);
-				spnMasse2.setEnabled(false);
-				btnCorrection.setEnabled(false);
-				spnFPS.setEnabled(false);
-				
-				feuCirculation.setFeu(Feu.Vert);
-				
 			}
 		});
 		simulation.setBorder(new LineBorder(new Color(0, 0, 0)));
