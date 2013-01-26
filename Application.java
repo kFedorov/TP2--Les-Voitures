@@ -271,8 +271,8 @@ public class Application extends JFrame {
 				btnCorrection.setEnabled(true);
 				tglPlayPause.setEnabled(true);
 				spnFPS.setEnabled(true);
-				textVitesse.setText("0.0");
-				textDeplace.setText("0.0");
+				textVitesse.setText("0.0m");
+				textDeplace.setText("0.0m");
 			}
 		});
 		btnStop.setBounds(20, 82, 140, 23);
@@ -330,9 +330,9 @@ public class Application extends JFrame {
 			@Override
 			public void estAnime() {
 				toFloor = Math.floor(100*((double) simulation.getV2()))/100;
-				textVitesse.setText(Double.toString(toFloor));
+				textVitesse.setText(Double.toString(toFloor)+"m");
 				toFloor = Math.floor(100*((double) simulation.getDeplace()))/100;
-				textDeplace.setText(Double.toString(toFloor));
+				textDeplace.setText(Double.toString(toFloor)+"m");
 
 			}
 		});
@@ -344,7 +344,7 @@ public class Application extends JFrame {
 
 		feuCirculation = new FeuCirculation();
 		feuCirculation.setFeu(Feu.Aucune);
-		feuCirculation.setBounds(10, 10, 248, 256);
+		feuCirculation.setBounds(10, 10, 444, 359);
 		simulation.add(feuCirculation);
 
 		menuBar = new JMenuBar();
