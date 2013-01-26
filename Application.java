@@ -219,8 +219,8 @@ public class Application extends JFrame {
 		panel_1.add(btnQuittez);
 
 		textVitesse = new JTextField();
-		textVitesse.setText("0.0");
-		textVitesse.setFont(new Font("Segoe UI", Font.PLAIN, 50));
+		textVitesse.setText("0.0m/s");
+		textVitesse.setFont(new Font("Segoe UI", Font.PLAIN, 40));
 		textVitesse.setHorizontalAlignment(SwingConstants.CENTER);
 		textVitesse.setEditable(false);
 		textVitesse.setBounds(12, 11, 181, 78);
@@ -231,7 +231,7 @@ public class Application extends JFrame {
 		textDeplace.setHorizontalAlignment(SwingConstants.CENTER);
 		textDeplace.setFont(new Font("Segoe UI", Font.PLAIN, 50));
 		textDeplace.setEditable(false);
-		textDeplace.setText("0.0");
+		textDeplace.setText("0.0m");
 		textDeplace.setBounds(205, 11, 183, 78);
 		panel_1.add(textDeplace);
 		textDeplace.setColumns(10);
@@ -327,14 +327,14 @@ public class Application extends JFrame {
 				btnStop.setText("Reset");
 
 				toFloor = Math.floor(100*((double) simulation.getV2()))/100;
-				textVitesse.setText(Double.toString(toFloor)+"m");
+				textVitesse.setText(Double.toString(toFloor)+"m/s");
 				toFloor = Math.floor(100*((double) simulation.getDeplace()))/100;
 				textDeplace.setText(Double.toString(toFloor)+"m");
 			}
 			@Override
 			public void estAnime() {
 				toFloor = Math.floor(100*((double) simulation.getV2()))/100;
-				textVitesse.setText(Double.toString(toFloor)+"m");
+				textVitesse.setText(Double.toString(toFloor)+"m/s");
 				toFloor = Math.floor(100*((double) simulation.getDeplace()))/100;
 				textDeplace.setText(Double.toString(toFloor)+"m");
 
