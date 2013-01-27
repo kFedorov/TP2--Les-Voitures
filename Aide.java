@@ -1,5 +1,4 @@
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
 import javax.swing.JButton;
@@ -13,7 +12,12 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
+/**
+ * 
+ * Fenêtre d'aide pour le fonctionnement de l'application.
+ * @author Konstantin Fedorov et Philippe Miriello
+ *
+ */
 public class Aide extends JFrame {
 
   /**
@@ -45,9 +49,10 @@ public class Aide extends JFrame {
 	}
 
 	/**
-	 * Create the frame.
+	 * Génération de la fenêtre
 	 */
 	public Aide() {
+		setResizable(false);
 		
 		
 		setTitle("Aide - Miriello, Fedorov");
