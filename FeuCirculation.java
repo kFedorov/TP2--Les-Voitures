@@ -9,6 +9,12 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+/**
+ * 
+ * Classe graphique qui dessine un panneau de circulation. Elle répond aux changements de la classe Simulation.
+ * @author Konstantin Fedorov, Philippe Miriello
+ *  
+ */
 
 public class FeuCirculation extends JPanel {
 
@@ -35,6 +41,10 @@ public class FeuCirculation extends JPanel {
 
 
 	}
+
+	/**
+	 * Dessine le composant
+	 */
 
 	@Override
 	public void paintComponent(Graphics g){
@@ -65,6 +75,14 @@ public class FeuCirculation extends JPanel {
 
 	}
 
+	/**
+	 * Méthode qui s'assure que le composant est un carré
+	 * @param x Position en x
+	 * @param y Position en Y
+	 * @param width Longueur du composant
+	 * @param height Hauteur du composant
+	 */
+
 	@Override
 	public void setBounds(int x, int y, int width, int height){
 		if (width>height){
@@ -76,10 +94,18 @@ public class FeuCirculation extends JPanel {
 	}
 
 
+	/**
+	 * Retourne la couleur du feu allumé
+	 * 
+	 */
 	public Color getFeu() {
 		return feu;
 	}
 
+	/**
+	 * Donne une couleur au feu allumé
+	 * @param couleur Une des valeurs de l'énum Feu. Rouge, Jaune, Vert ou Aucune.
+	 */
 	public void setFeu(Feu couleur) {
 		switch(couleur){
 		case Vert: alY= (int)(factX*242); feu=Color.green; drawFeu=true;
