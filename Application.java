@@ -20,7 +20,14 @@ import java.awt.Font;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
+import java.awt.Point;
 
+/**
+ * 
+ * Classe graphique qui englobe tout les composants avec une interface. 
+ * @author Konstantin Fedorov, Philippe Miriello
+ *  
+ */
 
 public class Application extends JFrame {
 
@@ -129,11 +136,11 @@ public class Application extends JFrame {
 		panel.add(lblMasse2);
 
 		lblCoeff = new JLabel("Coeff");
-		lblCoeff.setBounds(10, 51, 46, 14);
+		lblCoeff.setBounds(10, 50, 46, 14);
 		panel.add(lblCoeff);
 
 		lblNewLabel_3 = new JLabel("Angle");
-		lblNewLabel_3.setBounds(200, 51, 39, 14);
+		lblNewLabel_3.setBounds(200, 50, 39, 14);
 		panel.add(lblNewLabel_3);
 
 		lblVitesse = new JLabel("Vitesse");
@@ -146,7 +153,7 @@ public class Application extends JFrame {
 				simulation.setM1((int) spnMasse1.getValue());
 			}
 		});
-		spnMasse1.setModel(new SpinnerNumberModel(new Integer(3200), new Integer(100), null, new Integer(10)));
+		spnMasse1.setModel(new SpinnerNumberModel(3200, 100, 9999, 10));
 		spnMasse1.setBounds(66, 8, 87, 20);
 		panel.add(spnMasse1);
 
@@ -156,8 +163,8 @@ public class Application extends JFrame {
 				simulation.setM2((int)(spnMasse2.getValue()));
 			}
 		});
-		spnMasse2.setModel(new SpinnerNumberModel(new Integer(2000), new Integer(100), null, new Integer(10)));
-		spnMasse2.setBounds(262, 8, 76, 20);
+		spnMasse2.setModel(new SpinnerNumberModel(2000, 100, 9999, 10));
+		spnMasse2.setBounds(290, 8, 76, 20);
 		panel.add(spnMasse2);
 
 		spnCoeff = new JSpinner();
@@ -166,8 +173,8 @@ public class Application extends JFrame {
 				simulation.setFrottement((double)(spnCoeff.getValue()));
 			}
 		});
-		spnCoeff.setModel(new SpinnerNumberModel(new Double(0.8), new Double(0.1), null, new Double(0.1)));
-		spnCoeff.setBounds(66, 48, 87, 20);
+		spnCoeff.setModel(new SpinnerNumberModel(0.8, 0.1, 10.0, 0.1));
+		spnCoeff.setBounds(66, 47, 87, 20);
 		panel.add(spnCoeff);
 
 		spnVitesse = new JSpinner();
@@ -176,7 +183,7 @@ public class Application extends JFrame {
 				simulation.setV1((double) spnVitesse.getValue());
 			}
 		});
-		spnVitesse.setModel(new SpinnerNumberModel(new Double(35), new Double(1), null, new Double(5)));
+		spnVitesse.setModel(new SpinnerNumberModel(35.0, 1.0, 99.0, 5.0));
 		spnVitesse.setBounds(66, 85, 87, 20);
 		panel.add(spnVitesse);
 
@@ -186,8 +193,8 @@ public class Application extends JFrame {
 				simulation.setAngle((double) (spnAngle.getValue()));
 			}
 		});
-		spnAngle.setModel(new SpinnerNumberModel(20.0, 0.0, 30.0, 0.1));
-		spnAngle.setBounds(262, 48, 49, 20);
+		spnAngle.setModel(new SpinnerNumberModel(20.0, 0.0, 45.0, 0.0));
+		spnAngle.setBounds(251, 48, 39, 20);
 		panel.add(spnAngle);
 
 		lblKg = new JLabel("kg");
@@ -195,7 +202,7 @@ public class Application extends JFrame {
 		panel.add(lblKg);
 
 		lblKg_1 = new JLabel("kg");
-		lblKg_1.setBounds(343, 10, 52, 16);
+		lblKg_1.setBounds(369, 10, 52, 16);
 		panel.add(lblKg_1);
 
 		lblMs = new JLabel("m/s");
@@ -203,7 +210,7 @@ public class Application extends JFrame {
 		panel.add(lblMs);
 
 		lblO = new JLabel("o");
-		lblO.setBounds(313, 45, 52, 16);
+		lblO.setBounds(290, 41, 52, 16);
 		panel.add(lblO);
 
 		panel_1 = new JPanel();
@@ -212,7 +219,7 @@ public class Application extends JFrame {
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 
-		btnQuittez = new JButton("Quitter");
+		btnQuittez = new JButton("Quittez");
 		btnQuittez.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				System.exit(0);
@@ -251,7 +258,7 @@ public class Application extends JFrame {
 		panel_1.add(spnFPS);
 
 		lblFps = new JLabel("Images par Seconde");
-		lblFps.setBounds(85, 99, 161, 14);
+		lblFps.setBounds(85, 99, 108, 14);
 		panel_1.add(lblFps);
 
 		lblVitesse_1 = new JLabel("Vitesse");
@@ -369,7 +376,7 @@ public class Application extends JFrame {
 
 		feuCirculation = new FeuCirculation();
 		feuCirculation.setFeu(Feu.Aucune);
-		feuCirculation.setBounds(0, 0, 215, 254);
+		feuCirculation.setBounds(0, 0, 300, 300);
 		simulation.add(feuCirculation);
 
 		menuBar = new JMenuBar();
